@@ -1,0 +1,52 @@
+# 构建并部署到 GitHub Pages（gh-pages 分支），自定义域名见 public/CNAME
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch: # 允许手动触发
+  push:
+    branches: [master]
+    paths-ignore:
+      - 'monthly.log'
+      - '**.md'
+      - '.github/workflows/keep-alive.yml'
+
+# 同一时间只保留一个部署，新的推送会取消正在进行的旧部署
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 推送 gh-pages 分支
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4 # 版本读取 package.json 的 packageManager 字段
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true # gh-pages 只保留最新一次构建，不累积历史
+          commit_message: 'deploy: ${{ github.sha }}'

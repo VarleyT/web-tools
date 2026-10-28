@@ -63,4 +63,15 @@ src/
 
 ## 部署
 
-`pnpm build` 后把 `dist/` 作为静态目录部署到任意位置即可（GitHub Pages、Cloudflare Pages、Vercel、Nginx）。使用 hash 路由与相对路径 `base: './'`，无需配置 history fallback，也可部署在子路径下。
+线上地址：https://tool.bytegrep.com （GitHub Pages）
+
+- `.github/workflows/deploy.yml`：推送到 `master` 或手动触发时，执行测试、构建，并把 `dist/` 发布到 `gh-pages` 分支。
+- `public/CNAME`：自定义域名，构建时复制进 `dist/`。
+- `.github/workflows/keep-alive.yml`：每月 1 号提交一次 `monthly.log`，防止仓库 60 天无活动导致定时 workflow 被 GitHub 停用。
+
+首次部署需要：
+
+1. DNS（Cloudflare）添加 `CNAME  tool  →  varleyt.github.io`。
+2. 仓库 Settings → Pages：Source 选 **Deploy from a branch**，分支选 `gh-pages` / `(root)`；证书签发后勾选 **Enforce HTTPS**。
+
+也可以把 `dist/` 部署到任意静态托管（Cloudflare Pages、Vercel、Nginx）。项目使用 hash 路由与相对路径 `base: './'`，无需配置 history fallback，也可部署在子路径下。

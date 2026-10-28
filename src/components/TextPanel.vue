@@ -10,6 +10,8 @@ withDefaults(
     placeholder?: string
     rows?: number
     invalid?: boolean
+    /** 不自动换行（如 PEM 密钥，按原始行显示） */
+    nowrap?: boolean
   }>(),
   { rows: 12, placeholder: '' },
 )
@@ -34,6 +36,7 @@ withDefaults(
       :placeholder="placeholder"
       :aria-label="label"
       :aria-invalid="invalid || undefined"
+      :wrap="nowrap ? 'off' : 'soft'"
       spellcheck="false"
       autocomplete="off"
     />

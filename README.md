@@ -4,11 +4,11 @@
 
 参考了 [naroat/tools-web](https://github.com/naroat/tools-web) 与 [nidhogg1024/Ctool](https://github.com/nidhogg1024/Ctool) 的工具分类与交互方式。
 
-## 工具（20 个）
+## 工具（22 个）
 
 | 分类 | 工具 |
 | --- | --- |
-| 编解码 / 加密 | Base64（含文件转 Data URL）、URL（含 URL 解析）、HTML 实体、Unicode 转义、哈希 / HMAC、对称加解密（AES / DES / 3DES / RC4）、JWT 解析 |
+| 编解码 / 加密 | Base64（含文件转 Data URL）、Hex ⇄ ASCII、URL（含 URL 解析）、HTML 实体、Unicode 转义、哈希 / HMAC、对称加解密（AES / DES / 3DES / RC4）、RSA 加解密（PKCS#1 v1.5 / OAEP，含密钥对生成）、JWT 解析 |
 | 数据格式 | JSON 格式化 / 压缩 / 校验 / 排序 / 转义、JSON ⇄ YAML、SQL 格式化（多方言） |
 | 开发辅助 | 时间戳转换、进制转换（大整数）、UUID v4 / v7、正则测试（高亮 + 替换）、文本对比、颜色转换 |
 | 生成器 / 文本 | 密码生成、二维码生成、字数统计、命名风格转换 |
@@ -62,7 +62,7 @@ src/
 ## 隐私
 
 - 工具选项与一般输入（JSON、SQL、正则、对比文本等）保存在 `localStorage`（键前缀 `bytegrep:`），仅本机可见。
-- 可能含凭据的输入**只保存在内存**，刷新即清空：对称加密的明文 / 密钥 / IV、哈希输入与 HMAC 密钥、Base64 与 URL 输入、JWT、二维码内容、生成的密码。
+- 可能含凭据的输入**只保存在内存**，刷新即清空：对称加密的明文 / 密钥 / IV、哈希输入与 HMAC 密钥、RSA 公私钥与明文、Base64 / Hex / URL 输入、JWT、二维码内容、生成的密码。
 - 正则在 Web Worker 中执行，超过 1.5 秒自动中止，灾难性回溯不会卡死页面。
 - JSON / YAML 中超出安全整数范围（±2^53）的数字会给出精度丢失提示。
 

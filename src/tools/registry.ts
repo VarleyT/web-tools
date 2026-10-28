@@ -20,7 +20,7 @@ export interface ToolMeta {
 }
 
 export const CATEGORIES: readonly Category[] = [
-  { id: 'encode', name: '编解码 / 加密', description: 'Base64、URL、哈希、对称加密、JWT' },
+  { id: 'encode', name: '编解码 / 加密', description: 'Base64、Hex、URL、哈希、AES、RSA、JWT' },
   { id: 'data', name: '数据格式', description: 'JSON、YAML、SQL 格式化与互转' },
   { id: 'dev', name: '开发辅助', description: '时间戳、进制、UUID、正则、对比、颜色' },
   { id: 'generator', name: '生成器 / 文本', description: '密码、二维码、字数统计、命名转换' },
@@ -35,6 +35,15 @@ export const TOOLS: readonly ToolMeta[] = [
     badge: 'B64',
     keywords: ['base64', 'encode', 'decode', 'dataurl', '编码', '解码', '图片'],
     component: () => import('./Base64Tool.vue'),
+  },
+  {
+    id: 'hex',
+    name: 'Hex ⇄ ASCII',
+    description: 'ASCII / UTF-8 文本与十六进制互转，支持空格、冒号、0x、\\x 等格式',
+    category: 'encode',
+    badge: '0x',
+    keywords: ['hex', 'ascii', 'bytes', '十六进制', '16进制', '字节', '编码', '解码'],
+    component: () => import('./HexTool.vue'),
   },
   {
     id: 'url',
@@ -80,6 +89,15 @@ export const TOOLS: readonly ToolMeta[] = [
     badge: 'AES',
     keywords: ['aes', 'des', '3des', 'tripledes', 'rc4', 'encrypt', 'decrypt', 'cbc', 'ecb', '加密', '解密'],
     component: () => import('./CipherTool.vue'),
+  },
+  {
+    id: 'rsa',
+    name: 'RSA 加解密',
+    description: '公钥加密 / 私钥解密，支持 PKCS#1 v1.5 与 OAEP，可在线生成密钥对',
+    category: 'encode',
+    badge: 'RSA',
+    keywords: ['rsa', 'oaep', 'pkcs1', 'pem', '公钥', '私钥', '非对称', '密钥对', '加密', '解密'],
+    component: () => import('./RsaTool.vue'),
   },
   {
     id: 'jwt',

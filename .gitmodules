@@ -1,0 +1,3 @@
+[submodule "skill/apple-design-skill"]
+	path = skill/apple-design-skill
+	url = https://github.com/naplesblue/apple-design-skill.git

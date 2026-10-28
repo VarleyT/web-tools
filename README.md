@@ -24,6 +24,11 @@ Vue 3 · Vite · TypeScript · Tailwind CSS v4 · Vue Router（hash 模式）· 
 ## 开发
 
 ```bash
+# 克隆时一并拉取外部引用的 skill（git submodule）
+git clone --recurse-submodules https://github.com/VarleyT/web-tools.git
+# 已克隆的仓库补拉 submodule
+git submodule update --init
+
 pnpm install
 pnpm dev          # 本地开发 http://localhost:5173
 pnpm test         # 单元测试

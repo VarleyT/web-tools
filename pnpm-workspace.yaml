@@ -1,0 +1,5 @@
+# 修复间接依赖的安全漏洞（GitHub Dependabot 告警）
+overrides:
+  # CVE-2021-3807 ReDoS，来源 qrcode -> yargs -> cliui -> strip-ansi
+  ansi-regex@5: ^5.0.1
+  strip-ansi@6: ^6.0.1

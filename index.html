@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ByteGrep Tool - 个人在线工具箱：编解码、加密、JSON、时间戳、正则、二维码等，全部在浏览器本地运行" />
+    <title>ByteGrep Tool</title>
+    <script>
+      // 首屏前应用主题，避免闪烁
+      try {
+        const mode = localStorage.getItem('bytegrep:theme') || 'auto'
+        const dark = mode === 'dark' || (mode === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.classList.toggle('dark', dark)
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

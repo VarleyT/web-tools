@@ -42,17 +42,19 @@ const { value: description, error } = useSafeComputed<TimeDescription | null>(()
 
 <template>
   <div class="flex flex-col gap-6">
-    <section class="card">
-      <div class="mb-2 flex items-center justify-between">
+    <section class="panel">
+      <div class="mb-1 flex items-center justify-between">
         <h2 class="font-semibold">当前时间</h2>
-        <button type="button" class="btn btn-sm" @click="togglePause">{{ isTicking ? '❚❚ 暂停' : '▶ 继续' }}</button>
+        <button type="button" class="btn btn-sm" @click="togglePause">{{ isTicking ? '暂停' : '继续' }}</button>
       </div>
-      <CopyRow label="秒" :value="String(Math.floor(current / 1000))" />
-      <CopyRow label="毫秒" :value="String(current)" />
-      <CopyRow label="本地时间" :value="formatDate(new Date(current))" />
+      <div class="rows">
+        <CopyRow label="秒" :value="String(Math.floor(current / 1000))" />
+        <CopyRow label="毫秒" :value="String(current)" />
+        <CopyRow label="本地时间" :value="formatDate(new Date(current))" />
+      </div>
     </section>
 
-    <section class="card flex flex-col gap-3">
+    <section class="panel flex flex-col gap-3">
       <h2 class="font-semibold">时间戳 ⇄ 日期</h2>
       <div class="flex flex-wrap items-center gap-3">
         <input
@@ -74,9 +76,9 @@ const { value: description, error } = useSafeComputed<TimeDescription | null>(()
           ]"
         />
       </div>
-      <p class="text-xs text-slate-400">不带时区的日期按本地时区（{{ TIME_ZONE }}）解析；纯数字按位数自动识别单位。</p>
+      <p class="hint">不带时区的日期按本地时区（{{ TIME_ZONE }}）解析；纯数字按位数自动识别单位。</p>
       <ErrorAlert :message="error" />
-      <div v-if="description">
+      <div v-if="description" class="rows">
         <CopyRow label="秒级时间戳" :value="description.seconds" />
         <CopyRow label="毫秒时间戳" :value="description.milliseconds" />
         <CopyRow label="本地时间" :value="description.local" />

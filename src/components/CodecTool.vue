@@ -3,6 +3,7 @@ import { ref, type Ref } from 'vue'
 import { useSafeComputed } from '@/composables/useSafeComputed'
 import { useToolState } from '@/composables/useToolState'
 import ErrorAlert from './ErrorAlert.vue'
+import AppIcon from './AppIcon.vue'
 import OptionGroup from './OptionGroup.vue'
 import TextPanel from './TextPanel.vue'
 
@@ -48,7 +49,9 @@ function applyOutputAsInput(): void {
         ]"
       />
       <slot name="options" :mode="mode" />
-      <button type="button" class="btn ml-auto" :disabled="!output" @click="applyOutputAsInput">⇅ 结果作为输入</button>
+      <button type="button" class="btn ml-auto" :disabled="!output" @click="applyOutputAsInput"><AppIcon name="swap-vertical" :size="15" />
+        结果作为输入
+      </button>
     </div>
     <div class="grid gap-4 lg:grid-cols-2">
       <TextPanel v-model="input" :label="rememberInput ? '输入' : '输入（不会保存）'" :placeholder="placeholder" />

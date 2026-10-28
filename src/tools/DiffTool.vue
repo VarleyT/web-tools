@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { refDebounced } from '@vueuse/core'
 import { computed } from 'vue'
+import AppIcon from '@/components/AppIcon.vue'
 import OptionGroup from '@/components/OptionGroup.vue'
 import TextPanel from '@/components/TextPanel.vue'
 import { useToolState } from '@/composables/useToolState'
@@ -8,8 +9,8 @@ import { computeDiff, type DiffMode, type DiffType } from '@/lib/textDiff'
 
 const DIFF_DEBOUNCE_MS = 250
 const PART_CLASSES: Record<DiffType, string> = {
-  added: 'bg-emerald-100 text-emerald-900 dark:bg-emerald-500/20 dark:text-emerald-200',
-  removed: 'bg-red-100 text-red-900 line-through decoration-red-400/60 dark:bg-red-500/20 dark:text-red-200',
+  added: 'bg-success/15 text-ink',
+  removed: 'bg-danger/12 text-ink-2 line-through decoration-danger/50',
   same: '',
 }
 
@@ -47,18 +48,21 @@ const hasInput = computed(() => debouncedOriginal.value !== '' || debouncedModif
           { label: '按字符', value: 'char' },
         ]"
       />
-      <span v-if="hasInput" class="font-mono text-sm">
-        <span class="text-emerald-600 dark:text-emerald-400">+{{ result.added }}</span>
+      <span v-if="hasInput" class="text-[14px] font-medium text-ink-3 tabular-nums">
+        <span class="text-success">+{{ result.added }}</span>
         /
-        <span class="text-red-600 dark:text-red-400">-{{ result.removed }}</span>
+        <span class="text-danger">−{{ result.removed }}</span>
       </span>
     </div>
     <div class="grid gap-4 lg:grid-cols-2">
       <TextPanel v-model="original" label="原文本" :rows="12" />
       <TextPanel v-model="modified" label="新文本" :rows="12" />
     </div>
-    <section v-if="hasInput" class="card">
-      <p v-if="isIdentical" class="text-sm text-emerald-600 dark:text-emerald-400">两段文本完全相同</p>
+    <section v-if="hasInput" class="panel">
+      <p v-if="isIdentical" class="flex items-center gap-2 text-[14px] text-success">
+        <AppIcon name="check" :size="16" />
+        两段文本完全相同
+      </p>
       <pre v-else class="mono overflow-x-auto break-all whitespace-pre-wrap"><span
           v-for="part in result.parts"
           :key="part.key"

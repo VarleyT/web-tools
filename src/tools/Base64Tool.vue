@@ -58,18 +58,18 @@ function onFileChange(event: Event): void {
           <input v-model="urlSafe" type="checkbox" />
           URL-safe（- _ 无填充）
         </label>
-        <span v-else class="text-xs text-slate-400">自动兼容 URL-safe、缺省填充与换行</span>
+        <span v-else class="hint">自动兼容 URL-safe、缺省填充与换行</span>
       </template>
     </CodecTool>
 
-    <section class="card flex flex-col gap-3">
+    <section class="panel flex flex-col gap-3">
       <div class="flex flex-wrap items-center gap-3">
         <h2 class="font-semibold">文件转 Base64</h2>
-        <label class="btn btn-sm focus-within:outline-2 focus-within:outline-indigo-500">
+        <label class="btn btn-sm focus-within:outline-2 focus-within:outline-accent">
           选择文件
           <input type="file" class="sr-only" @change="onFileChange" />
         </label>
-        <span class="text-xs text-slate-400">{{ fileName || `本地读取不上传，最大 ${MAX_FILE_MB} MB` }}</span>
+        <span class="hint">{{ fileName || `本地读取不上传，最大 ${MAX_FILE_MB} MB` }}</span>
         <CopyButton v-if="dataUrl" class="ml-auto" :text="dataUrl" label="复制 Data URL" />
       </div>
       <ErrorAlert :message="fileError" />
@@ -77,7 +77,7 @@ function onFileChange(event: Event): void {
         v-if="isImage"
         :src="dataUrl"
         alt="图片预览"
-        class="max-h-48 self-start rounded-lg border border-slate-200 dark:border-slate-700"
+        class="max-h-48 self-start rounded-thumb shadow-card"
       />
       <textarea v-if="dataUrl" class="textarea" rows="4" readonly :value="dataUrl" aria-label="Data URL" />
     </section>

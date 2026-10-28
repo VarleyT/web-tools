@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import AppIcon from '@/components/AppIcon.vue'
 import ErrorAlert from '@/components/ErrorAlert.vue'
 import OptionGroup from '@/components/OptionGroup.vue'
 import TextPanel from '@/components/TextPanel.vue'
@@ -90,7 +91,7 @@ function swapAction(): void {
 
 <template>
   <div class="flex flex-col gap-4">
-    <section class="card grid gap-4 md:grid-cols-2">
+    <section class="panel grid gap-4 md:grid-cols-2">
       <div class="flex flex-col gap-1.5">
         <span class="label">算法</span>
         <OptionGroup v-model="algorithm" aria-label="算法" :options="ALGORITHMS" />
@@ -150,7 +151,9 @@ function swapAction(): void {
           { label: 'Hex', value: 'hex' },
         ]"
       />
-      <button type="button" class="btn ml-auto" :disabled="!output" @click="swapAction">⇅ 结果作为输入</button>
+      <button type="button" class="btn ml-auto" :disabled="!output" @click="swapAction"><AppIcon name="swap-vertical" :size="15" />
+        结果作为输入
+      </button>
     </div>
 
     <div class="grid gap-4 lg:grid-cols-2">

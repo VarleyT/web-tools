@@ -27,14 +27,12 @@ export function useRecent() {
 
 export type ThemeMode = 'auto' | 'light' | 'dark'
 
-const THEME_CYCLE: Record<ThemeMode, ThemeMode> = { auto: 'light', light: 'dark', dark: 'auto' }
-
 export function useTheme() {
   // 与 index.html 中的首屏脚本共用同一存储键
   const mode = useColorMode({ storageKey: `${STORAGE_PREFIX}theme`, emitAuto: true })
   const theme = computed(() => mode.store.value as ThemeMode)
-  const cycleTheme = (): void => {
-    mode.store.value = THEME_CYCLE[theme.value] ?? 'auto'
+  const setTheme = (value: ThemeMode): void => {
+    mode.store.value = value
   }
-  return { theme, cycleTheme }
+  return { theme, setTheme }
 }

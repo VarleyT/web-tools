@@ -29,7 +29,7 @@ const { value: results, error } = useSafeComputed(() => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <section class="card flex flex-col gap-3">
+    <section class="panel flex flex-col gap-3">
       <div class="flex flex-wrap items-end gap-3">
         <label class="flex min-w-60 flex-1 flex-col gap-1.5">
           <span class="label">输入数值（支持 0x / 0b / 0o 前缀、下划线分隔、负数与大整数）</span>
@@ -52,7 +52,7 @@ const { value: results, error } = useSafeComputed(() => {
       </div>
       <ErrorAlert :message="error" />
     </section>
-    <section v-if="results.length" class="card py-2">
+    <section v-if="results.length" class="panel rows py-1.5">
       <CopyRow v-for="result in results" :key="result.base" :label="baseName(result.base)" :value="result.value" />
     </section>
   </div>

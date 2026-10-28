@@ -56,7 +56,7 @@ const results = computed(() =>
       />
     </div>
     <TextPanel v-model="input" label="输入文本（UTF-8，不会保存）" :rows="6" placeholder="输入要计算摘要的文本" />
-    <section class="card py-2">
+    <section class="panel rows py-1.5">
       <CopyRow v-for="result in results" :key="result.algorithm" :label="result.label" :value="result.value" />
     </section>
   </div>

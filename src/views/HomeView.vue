@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import ToolCard from '@/components/ToolCard.vue'
+import AppIcon from '@/components/AppIcon.vue'
+import ToolList from '@/components/ToolList.vue'
 import { useFavorites, useRecent } from '@/composables/usePreferences'
 import { useToolSearch } from '@/composables/useToolSearch'
 import { CATEGORIES, findTool, searchTools, toolsOfCategory, TOOLS, type ToolMeta } from '@/tools/registry'
 
-const { query } = useToolSearch()
+const { query, requestSearchFocus } = useToolSearch()
 const { favorites } = useFavorites()
 const { recent, clearRecent } = useRecent()
+const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent)
+const FEATURES = [`${TOOLS.length} 个工具`, '本地运算不上传', '深色模式'] as const
 
 const resolve = (ids: readonly string[]): ToolMeta[] =>
   ids.map(findTool).filter((tool): tool is ToolMeta => tool !== undefined)
@@ -20,78 +23,76 @@ const searchResults = computed(() => (isSearching.value ? searchTools(query.valu
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl">
+  <div class="mx-auto flex max-w-[1080px] flex-col gap-[clamp(34px,6vw,56px)]">
+    <!-- 主视觉：彩色 CTA，渐变 + 模糊光斑，毛玻璃标签放在光斑之上 -->
     <section
-      class="relative mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-white px-6 py-8 sm:px-8 dark:border-slate-800 dark:bg-slate-900"
+      class="relative isolate overflow-hidden rounded-hero bg-[image:var(--grad-cta)] px-[clamp(24px,5vw,52px)] py-[clamp(32px,6vw,60px)] text-white shadow-cta"
     >
-      <div
-        class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgb(99_102_241/0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgb(99_102_241/0.07)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:linear-gradient(to_left,black,transparent_70%)]"
-        aria-hidden="true"
-      />
-      <p class="font-mono text-xs tracking-widest text-indigo-500 uppercase">$ grep --tools</p>
-      <h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">ByteGrep Tool</h1>
-      <p class="mt-2 max-w-xl text-slate-500 dark:text-slate-400">
-        开发者日常工具箱：编解码、加密、格式化、生成器。所有计算都在浏览器本地完成，数据不会上传。
+      <div class="absolute -top-24 -right-12 -z-10 size-80 rounded-full bg-white/18 blur-[46px]" aria-hidden="true" />
+      <div class="absolute -bottom-28 left-[12%] -z-10 size-60 rounded-full bg-[rgba(120,80,255,0.5)] blur-[50px]" aria-hidden="true" />
+      <div class="absolute top-1/3 right-[18%] -z-10 size-40 rounded-full bg-[rgba(90,200,250,0.35)] blur-[44px]" aria-hidden="true" />
+
+      <p class="text-[12px] font-semibold tracking-[0.14em] text-white/70">BYTEGREP TOOL</p>
+      <h1 class="mt-3.5 text-[clamp(32px,6vw,52px)] leading-[1.06] font-bold tracking-[-0.03em]">开发者工具箱</h1>
+      <p class="mt-4 max-w-[560px] text-[clamp(15px,2.5vw,18px)] leading-[1.6] text-white/82">
+        编解码、加密、格式化与生成器。所有计算都在浏览器本地完成，数据不离开你的设备。
       </p>
-      <dl class="mt-6 flex flex-wrap gap-x-8 gap-y-2 font-mono text-sm">
-        <div>
-          <dt class="text-slate-400">tools</dt>
-          <dd class="text-xl font-semibold">{{ TOOLS.length }}</dd>
-        </div>
-        <div>
-          <dt class="text-slate-400">categories</dt>
-          <dd class="text-xl font-semibold">{{ CATEGORIES.length }}</dd>
-        </div>
-        <div>
-          <dt class="text-slate-400">server</dt>
-          <dd class="text-xl font-semibold">0</dd>
-        </div>
-      </dl>
+      <div class="mt-7 flex flex-wrap items-center gap-2.5">
+        <button
+          type="button"
+          class="btn h-11 bg-white px-5 text-[15px] font-semibold text-accent-link shadow-[0_8px_24px_rgba(0,0,0,0.14)] hover:bg-white/90"
+          @click="requestSearchFocus"
+        >
+          <AppIcon name="search" :size="17" />
+          搜索工具
+          <kbd class="ml-1 font-sans text-[12px] font-medium opacity-60 pointer-coarse:hidden">{{ isMac ? '⌘' : 'Ctrl' }} K</kbd>
+        </button>
+        <span v-for="feature in FEATURES" :key="feature" class="glass-chip inline-flex h-9 items-center rounded-pill px-4 text-[13px] font-[550]">
+          {{ feature }}
+        </span>
+      </div>
     </section>
 
-    <section v-if="isSearching" aria-labelledby="search-heading">
-      <h2 id="search-heading" class="mb-3 text-sm font-semibold text-slate-500">
-        搜索 “{{ query }}” · {{ searchResults.length }} 个结果
+    <section v-if="isSearching" aria-labelledby="search-heading" class="flex flex-col gap-4">
+      <h2 id="search-heading" class="text-[clamp(20px,3.4vw,26px)] leading-tight font-bold tracking-[-0.02em]">
+        “{{ query }}”的搜索结果
+        <span class="ml-1 text-[15px] font-medium tracking-normal text-ink-3 tabular-nums">{{ searchResults.length }}</span>
       </h2>
-      <div v-if="searchResults.length" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        <ToolCard v-for="tool in searchResults" :key="tool.id" :tool="tool" />
-      </div>
-      <p v-else class="text-slate-400">没有匹配的工具，换个关键词试试。</p>
+      <ToolList v-if="searchResults.length" :tools="searchResults" />
+      <p v-else class="text-ink-2">没有匹配的工具，换个关键词试试。</p>
     </section>
 
     <template v-else>
-      <section v-if="favoriteTools.length" class="mb-8" aria-labelledby="fav-heading">
-        <h2 id="fav-heading" class="mb-3 text-sm font-semibold text-slate-500">★ 收藏</h2>
-        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          <ToolCard v-for="tool in favoriteTools" :key="tool.id" :tool="tool" />
-        </div>
+      <section v-if="favoriteTools.length" aria-labelledby="fav-heading" class="flex flex-col gap-4">
+        <h2 id="fav-heading" class="text-[clamp(20px,3.4vw,26px)] leading-tight font-bold tracking-[-0.02em]">收藏</h2>
+        <ToolList :tools="favoriteTools" />
       </section>
 
-      <section v-if="recentTools.length" class="mb-8" aria-labelledby="recent-heading">
-        <div class="mb-3 flex items-center justify-between">
-          <h2 id="recent-heading" class="text-sm font-semibold text-slate-500">最近使用</h2>
-          <button type="button" class="btn btn-sm" @click="clearRecent">清除</button>
+      <section v-if="recentTools.length" aria-labelledby="recent-heading" class="-mt-[clamp(12px,3vw,24px)] flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-3">
+          <h2 id="recent-heading" class="text-[13px] font-semibold text-ink-3">最近使用</h2>
+          <button type="button" class="btn btn-ghost btn-sm text-ink-2" @click="clearRecent">清除</button>
         </div>
         <div class="flex flex-wrap gap-2">
           <RouterLink
             v-for="tool in recentTools"
             :key="tool.id"
             :to="{ name: 'tool', params: { id: tool.id } }"
-            class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm transition-colors hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-900 dark:hover:text-indigo-300"
+            class="btn btn-sm bg-surface font-medium text-ink-body shadow-card hover:bg-surface hover:text-accent-link"
           >
             {{ tool.name }}
           </RouterLink>
         </div>
       </section>
 
-      <section v-for="category in CATEGORIES" :key="category.id" class="mb-8" :aria-labelledby="`cat-${category.id}`">
-        <div class="mb-3 flex flex-wrap items-baseline gap-x-3">
-          <h2 :id="`cat-${category.id}`" class="text-lg font-semibold">{{ category.name }}</h2>
-          <span class="text-sm text-slate-400">{{ category.description }}</span>
+      <section v-for="category in CATEGORIES" :key="category.id" :aria-labelledby="`cat-${category.id}`" class="flex flex-col gap-4">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h2 :id="`cat-${category.id}`" class="text-[clamp(20px,3.4vw,26px)] leading-tight font-bold tracking-[-0.02em]">
+            {{ category.name }}
+          </h2>
+          <p class="text-[14px] text-ink-3">{{ category.description }}</p>
         </div>
-        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          <ToolCard v-for="tool in toolsOfCategory(category.id)" :key="tool.id" :tool="tool" />
-        </div>
+        <ToolList :tools="toolsOfCategory(category.id)" />
       </section>
     </template>
   </div>

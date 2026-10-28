@@ -20,12 +20,17 @@ const items = computed(() => [
 
 <template>
   <div class="flex flex-col gap-4">
-    <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-7">
-      <div v-for="item in items" :key="item.label" class="card px-4 py-3">
-        <dt class="label">{{ item.label }}</dt>
-        <dd class="mt-1 font-mono text-2xl font-semibold tabular-nums">{{ item.value.toLocaleString() }}</dd>
-      </div>
-    </dl>
+    <!-- 统一面板：指标放在同一面板内，用发丝线网格分隔（做法同 ToolList） -->
+    <div class="overflow-hidden rounded-panel bg-surface shadow-panel">
+      <dl class="-mt-px -ml-px grid w-[calc(100%+1px)] grid-cols-2 sm:grid-cols-4 xl:grid-cols-7">
+        <div v-for="item in items" :key="item.label" class="px-[clamp(16px,2.4vw,20px)] py-4 shadow-[inset_1px_1px_0_var(--hairline)]">
+          <dt class="text-[12.5px] text-ink-3">{{ item.label }}</dt>
+          <dd class="mt-1 text-[26px] leading-tight font-semibold tracking-[-0.02em] tabular-nums">
+            {{ item.value.toLocaleString() }}
+          </dd>
+        </div>
+      </dl>
+    </div>
     <TextPanel v-model="input" label="文本" :rows="18" placeholder="粘贴或输入文本，实时统计" />
   </div>
 </template>

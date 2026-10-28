@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIcon from '@/components/AppIcon.vue'
 import ErrorAlert from '@/components/ErrorAlert.vue'
 import OptionGroup from '@/components/OptionGroup.vue'
 import TextPanel from '@/components/TextPanel.vue'
@@ -50,7 +51,9 @@ function swap(): void {
           { label: '4 空格', value: 4 },
         ]"
       />
-      <button type="button" class="btn ml-auto" :disabled="!output" @click="swap">⇅ 结果作为输入</button>
+      <button type="button" class="btn ml-auto" :disabled="!output" @click="swap"><AppIcon name="swap-vertical" :size="15" />
+        结果作为输入
+      </button>
     </div>
     <div class="grid gap-4 lg:grid-cols-2">
       <TextPanel v-model="input" :label="direction === 'json2yaml' ? 'JSON' : 'YAML'" :rows="20" :invalid="!!error" />

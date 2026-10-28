@@ -61,7 +61,7 @@ watch(
   <div class="grid gap-4 lg:grid-cols-[1fr_auto]">
     <div class="flex flex-col gap-4">
       <TextPanel v-model="text" label="内容（不会保存）" :rows="6" placeholder="文本或链接" />
-      <section class="card grid gap-4 sm:grid-cols-2">
+      <section class="panel grid gap-4 sm:grid-cols-2">
         <div class="flex flex-col gap-1.5">
           <span class="label">容错等级</span>
           <OptionGroup
@@ -77,36 +77,36 @@ watch(
         </div>
         <label class="flex flex-col gap-1.5">
           <span class="label">尺寸 {{ size }}px</span>
-          <input v-model.number="size" type="range" :min="MIN_SIZE" :max="MAX_SIZE" step="32" class="accent-indigo-600" />
+          <input v-model.number="size" type="range" :min="MIN_SIZE" :max="MAX_SIZE" step="32" />
         </label>
         <label class="flex flex-col gap-1.5">
           <span class="label">边距 {{ margin }}</span>
-          <input v-model.number="margin" type="range" min="0" :max="MAX_MARGIN" class="accent-indigo-600" />
+          <input v-model.number="margin" type="range" min="0" :max="MAX_MARGIN" />
         </label>
         <div class="flex gap-4">
           <label class="flex flex-col gap-1.5">
             <span class="label">前景色</span>
-            <input v-model="foreground" type="color" class="h-9 w-14 cursor-pointer rounded border border-slate-200 dark:border-slate-700" />
+            <input v-model="foreground" type="color" class="h-10 w-14 cursor-pointer rounded-thumb" />
           </label>
           <label class="flex flex-col gap-1.5">
             <span class="label">背景色</span>
-            <input v-model="background" type="color" class="h-9 w-14 cursor-pointer rounded border border-slate-200 dark:border-slate-700" />
+            <input v-model="background" type="color" class="h-10 w-14 cursor-pointer rounded-thumb" />
           </label>
         </div>
       </section>
       <ErrorAlert :message="error" />
     </div>
 
-    <section class="card flex flex-col items-center gap-3 self-start">
+    <section class="panel flex flex-col items-center gap-3 self-start">
       <img
         v-if="dataUrl"
         :src="dataUrl"
         alt="生成的二维码"
-        class="size-64 rounded-lg [image-rendering:pixelated]"
+        class="size-64 rounded-thumb [image-rendering:pixelated]"
         width="256"
         height="256"
       />
-      <div v-else class="flex size-64 items-center justify-center rounded-lg bg-slate-100 text-sm text-slate-400 dark:bg-slate-800">
+      <div v-else class="flex size-64 items-center justify-center rounded-thumb bg-fill text-[13.5px] text-ink-3">
         输入内容后生成
       </div>
       <a v-if="dataUrl" :href="dataUrl" download="qrcode.png" class="btn btn-primary w-full">下载 PNG</a>

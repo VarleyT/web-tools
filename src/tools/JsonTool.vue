@@ -75,7 +75,7 @@ const isValidJson = computed(() => input.value.trim() !== '' && !error.value && 
           键名排序
         </label>
       </template>
-      <span v-if="isValidJson" class="text-xs font-medium text-emerald-600 dark:text-emerald-400">✓ 合法 JSON</span>
+      <span v-if="isValidJson" class="chip chip-success">✓ 合法 JSON</span>
       <div class="ml-auto flex gap-2">
         <button type="button" class="btn" @click="input = SAMPLE">示例</button>
         <button type="button" class="btn" :disabled="!output" @click="input = output">结果写回输入</button>

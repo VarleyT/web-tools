@@ -16,8 +16,8 @@ withDefaults(
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-1.5">
-    <div class="flex min-h-7 items-center justify-between gap-2">
+  <div class="flex min-w-0 flex-col gap-2">
+    <div class="flex min-h-[30px] items-center justify-between gap-2 px-1">
       <span class="label">{{ label }}</span>
       <div class="flex items-center gap-1.5">
         <slot name="actions" />
@@ -28,14 +28,12 @@ withDefaults(
     <textarea
       v-model="model"
       class="textarea"
-      :class="{
-        'border-red-400 focus:border-red-500 focus:ring-red-500/20 dark:border-red-500/60': invalid,
-        'bg-slate-50 dark:bg-slate-950': readonly,
-      }"
+      :class="{ 'field-invalid': invalid }"
       :rows="rows"
       :readonly="readonly"
       :placeholder="placeholder"
       :aria-label="label"
+      :aria-invalid="invalid || undefined"
       spellcheck="false"
       autocomplete="off"
     />

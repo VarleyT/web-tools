@@ -66,7 +66,7 @@ const { value: parsed, error: parseError } = useSafeComputed<ParsedUrl | null>((
       </template>
     </CodecTool>
 
-    <section class="card flex flex-col gap-3">
+    <section class="panel flex flex-col gap-3">
       <h2 class="font-semibold">URL 解析</h2>
       <input
         v-model="parseInput"
@@ -76,12 +76,14 @@ const { value: parsed, error: parseError } = useSafeComputed<ParsedUrl | null>((
       />
       <ErrorAlert :message="parseError" />
       <div v-if="parsed" class="grid gap-6 lg:grid-cols-2">
-        <div>
+        <div class="rows">
           <CopyRow v-for="field in parsed.fields" :key="field.label" :label="field.label" :value="field.value" />
         </div>
         <div>
-          <p class="label mb-1">查询参数（{{ parsed.params.length }}）</p>
-          <CopyRow v-for="param in parsed.params" :key="param.id" :label="param.key" :value="param.value" />
+          <p class="label pb-1">查询参数（{{ parsed.params.length }}）</p>
+          <div class="rows">
+            <CopyRow v-for="param in parsed.params" :key="param.id" :label="param.key" :value="param.value" />
+          </div>
         </div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
+import AppIcon from './AppIcon.vue'
 
 const COPIED_DURATION_MS = 1500
 
@@ -9,13 +10,8 @@ const { copy, copied } = useClipboard({ legacy: true, copiedDuring: COPIED_DURAT
 </script>
 
 <template>
-  <button
-    type="button"
-    class="btn btn-sm"
-    :class="{ 'border-emerald-500 text-emerald-600 dark:border-emerald-500 dark:text-emerald-400': copied }"
-    :disabled="!text"
-    @click="copy(text)"
-  >
+  <button type="button" class="btn btn-sm" :class="{ 'text-accent': copied }" :disabled="!text" @click="copy(text)">
+    <AppIcon v-if="copied" name="check" :size="14" />
     {{ copied ? '已复制' : label }}
   </button>
 </template>

@@ -14,7 +14,7 @@ const encode = (text: string): string => unicodeEscape(text, !escapeAll.value)
         <input v-model="escapeAll" type="checkbox" />
         ASCII 字符也转义
       </label>
-      <span v-else class="text-xs text-slate-400">支持 \uXXXX 与 \u{XXXXX}</span>
+      <span v-else class="hint">支持 \uXXXX 与 \u{XXXXX}</span>
     </template>
   </CodecTool>
 </template>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import AppIcon from './AppIcon.vue'
+
 defineProps<{ message: string }>()
 </script>
 
 <template>
-  <p
-    v-if="message"
-    role="alert"
-    class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 font-mono text-[13px] break-all text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300"
-  >
-    {{ message }}
+  <!-- 行内反馈：紧贴出错的位置，不用彩色底框 -->
+  <p v-if="message" role="alert" class="flex items-start gap-2 px-1 text-[13px] leading-relaxed break-all text-danger">
+    <AppIcon name="circle-alert" :size="16" class="mt-[3px]" />
+    <span>{{ message }}</span>
   </p>
 </template>

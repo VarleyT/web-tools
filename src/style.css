@@ -2,51 +2,431 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ════════════════════════════════════════════════════════════════
+   设计 token：取自 skill/apple-design-skill/tokens.css（浅色原值），
+   深色模式按 Apple 深色系统色补充。组件一律通过下方 @theme 生成的
+   语义类引用，不直接写色值。
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  /* 中性色 */
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --hover: #fbfbfd;
+  --text: #1d1d1f;
+  --text-body: #424245;
+  --text-2: #6e6e73;
+  --text-3: #86868b;
+  --text-4: #aeaeb2;
+  --faint: #d2d2d7;
+  --hairline: rgba(0, 0, 0, 0.07);
+  --track: #e8e8ed;
+
+  /* 控件填充（分段控件轨道、次要按钮、输入框描边） */
+  --fill: rgba(0, 0, 0, 0.05);
+  --fill-strong: rgba(0, 0, 0, 0.08);
+  --field-border: rgba(0, 0, 0, 0.12);
+  --seg-thumb: #ffffff;
+
+  /* 强调色：只用于操作 / 链接 / 焦点 / 激活态 */
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --accent-link: #0066cc;
+  /* 辅助色：渐变第二色，用于侧边栏分类标题等次级强调 */
+  --indigo: #5e5ce6;
+
+  /* 反馈色：Apple 高对比度系统色，保证小字号可读 */
+  --danger: #d70015;
+  --success: #248a3d;
+  --warning: #c93400;
+
+  /* 阴影：一律双层 */
+  --sh-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.05);
+  --sh-panel: 0 1px 3px rgba(0, 0, 0, 0.05), 0 14px 40px rgba(0, 0, 0, 0.05);
+  --sh-lift: 0 12px 32px rgba(0, 0, 0, 0.1);
+  --sh-overlay: 0 2px 8px rgba(0, 0, 0, 0.1), 0 30px 80px rgba(0, 0, 0, 0.24);
+  --sh-thumb: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+  --glass: rgba(245, 245, 247, 0.72);
+  --scrim: rgba(0, 0, 0, 0.3);
+
+  /* 标志性渐变：只用于主视觉 / 品牌标识 / 工具页图标 */
+  --grad-blue: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
+  --grad-cta: linear-gradient(135deg, #0071e3 0%, #5e5ce6 100%);
+  --sh-cta: 0 20px 54px rgba(0, 113, 227, 0.24);
+  --sh-mark: 0 6px 16px rgba(10, 132, 255, 0.28);
+
+  --font:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Cascadia Mono', monospace;
+}
+
+.dark {
+  --bg: #000000;
+  --surface: #1c1c1e;
+  --hover: #232325;
+  --text: #f5f5f7;
+  --text-body: #d2d2d7;
+  --text-2: #a1a1a6;
+  --text-3: #86868b;
+  --text-4: #6e6e73;
+  --faint: #48484a;
+  --hairline: rgba(255, 255, 255, 0.1);
+  --track: #2c2c2e;
+
+  --fill: rgba(255, 255, 255, 0.08);
+  --fill-strong: rgba(255, 255, 255, 0.13);
+  --field-border: rgba(255, 255, 255, 0.14);
+  --seg-thumb: #636366;
+
+  --accent: #0a84ff;
+  --accent-hover: #409cff;
+  --accent-link: #2997ff;
+  --indigo: #7d7aff;
+
+  --danger: #ff6961;
+  --success: #30d158;
+  --warning: #ff9f0a;
+
+  /* 深色下阴影几乎不可见，改用 1px 内描边区分层级 */
+  --sh-card: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --sh-panel: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 14px 40px rgba(0, 0, 0, 0.4);
+  --sh-lift: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 12px 32px rgba(0, 0, 0, 0.5);
+  --sh-overlay: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 80px rgba(0, 0, 0, 0.6);
+  --sh-thumb: 0 1px 3px rgba(0, 0, 0, 0.4);
+
+  --glass: rgba(22, 22, 23, 0.72);
+  --scrim: rgba(0, 0, 0, 0.5);
+
+  --sh-cta: 0 20px 54px rgba(10, 132, 255, 0.22);
+  --sh-mark: 0 6px 16px rgba(10, 132, 255, 0.32);
+}
+
+@theme inline {
+  --font-sans: var(--font);
+  --font-mono: var(--mono);
+
+  --color-ground: var(--bg);
+  --color-surface: var(--surface);
+  --color-hover: var(--hover);
+  --color-ink: var(--text);
+  --color-ink-body: var(--text-body);
+  --color-ink-2: var(--text-2);
+  --color-ink-3: var(--text-3);
+  --color-ink-4: var(--text-4);
+  --color-faint: var(--faint);
+  --color-hairline: var(--hairline);
+  --color-track: var(--track);
+  --color-fill: var(--fill);
+  --color-fill-strong: var(--fill-strong);
+  --color-field: var(--field-border);
+  --color-seg-thumb: var(--seg-thumb);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-link: var(--accent-link);
+  --color-indigo: var(--indigo);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  --shadow-card: var(--sh-card);
+  --shadow-panel: var(--sh-panel);
+  --shadow-lift: var(--sh-lift);
+  --shadow-overlay: var(--sh-overlay);
+  --shadow-thumb: var(--sh-thumb);
+  --shadow-cta: var(--sh-cta);
+  --shadow-mark: var(--sh-mark);
+}
+
 @theme {
-  --font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, 'SFMono-Regular', ui-monospace, monospace;
+  /* 圆角分级：不要使用中间值 */
+  --radius-chip: 6px;
+  --radius-thumb: 12px;
+  --radius-sheet: 16px;
+  --radius-card: 18px;
+  --radius-panel: 22px;
+  --radius-hero: 26px;
+  --radius-pill: 999px;
+
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 @layer base {
   html {
     color-scheme: light;
+    font-optical-sizing: auto;
+    accent-color: var(--accent);
   }
   html.dark {
     color-scheme: dark;
   }
   body {
-    @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s var(--ease-out-quart);
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  code,
+  kbd,
+  samp,
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+  ::placeholder {
+    color: var(--text-4);
+  }
+  /* 细滚动条，不抢内容的视觉 */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--faint) transparent;
   }
 }
 
 @layer components {
-  .card {
-    @apply rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900;
+  /* 白色面板：同类内容放在同一面板内，用发丝线分隔 */
+  .panel {
+    border-radius: var(--radius-panel);
+    background: var(--surface);
+    box-shadow: var(--sh-panel);
+    padding: clamp(17px, 3vw, 24px);
   }
+  .panel h2 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+  }
+  /* 相邻行之间加发丝线，首尾不加 */
+  .rows > * + * {
+    border-top: 1px solid var(--hairline);
+  }
+
   .btn {
-    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium whitespace-nowrap text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: var(--radius-pill);
+    background: var(--fill);
+    color: var(--text);
+    font-size: 13.5px;
+    font-weight: 550;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color 0.15s var(--ease-out-quart),
+      color 0.15s var(--ease-out-quart),
+      transform 0.1s ease-out;
+  }
+  .btn:hover {
+    background: var(--fill-strong);
+  }
+  /* 按下即反馈 */
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn:disabled {
+    opacity: 0.4;
+    pointer-events: none;
   }
   .btn-primary {
-    @apply border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-500 dark:border-indigo-500 dark:bg-indigo-600 dark:hover:bg-indigo-500;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
   }
   .btn-sm {
-    @apply px-2 py-1 text-xs;
+    height: 30px;
+    padding: 0 12px;
+    font-size: 12.5px;
+  }
+  .btn-icon {
+    width: 36px;
+    padding: 0;
+  }
+  .btn-ghost {
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    background: var(--fill);
+  }
+
+  /* 输入框：白底 + 细描边，聚焦时强调色描边与柔和光圈 */
+  .input,
+  .textarea {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px var(--field-border);
+    outline: none;
+    transition: box-shadow 0.15s var(--ease-out-quart);
   }
   .input {
-    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-900;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: var(--radius-thumb);
+    font-size: 14px;
   }
   .textarea {
-    @apply w-full resize-y rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-[13px] leading-relaxed outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-900;
+    resize: vertical;
+    padding: 14px 16px;
+    border-radius: var(--radius-card);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
   }
+  /* 灰色填充输入框：用于页面底色上的搜索框 */
+  .input-filled {
+    background: var(--fill);
+    box-shadow: none;
+  }
+  .input-filled:focus {
+    background: var(--surface);
+  }
+  .input:focus,
+  .textarea:focus {
+    box-shadow:
+      inset 0 0 0 1px var(--accent),
+      0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  .textarea[readonly] {
+    background: var(--hover);
+  }
+  .field-invalid,
+  .field-invalid:focus {
+    box-shadow:
+      inset 0 0 0 1px var(--danger),
+      0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
+  }
+  select.input {
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
   .label {
-    @apply text-xs font-medium text-slate-500 dark:text-slate-400;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+  .hint {
+    font-size: 12.5px;
+    color: var(--text-3);
   }
   .checkbox-label {
-    @apply inline-flex cursor-pointer items-center gap-1.5 text-sm select-none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    font-size: 13.5px;
+    color: var(--text-body);
+    cursor: pointer;
+    user-select: none;
   }
   .checkbox-label input {
-    @apply size-4 accent-indigo-600;
+    width: 16px;
+    height: 16px;
   }
   .mono {
-    @apply font-mono text-[13px];
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  /* 标签 */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: var(--radius-pill);
+    background: var(--fill);
+    color: var(--text-2);
+    font-size: 11.5px;
+    font-weight: 550;
+  }
+  .chip-accent {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    color: var(--accent-link);
+  }
+  .chip-success {
+    background: color-mix(in srgb, var(--success) 12%, transparent);
+    color: var(--success);
+  }
+  .chip-danger {
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    color: var(--danger);
+  }
+
+  /* 毛玻璃：只用于与滚动内容重叠的吸顶栏 */
+  .glass-nav {
+    background: var(--glass);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
+  /* 彩色主视觉上的毛玻璃标签（背后需要有模糊光斑可折射） */
+  .glass-chip {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #fff;
+  }
+}
+
+/* 触屏设备：控件点击区域不小于 44px */
+@media (pointer: coarse) {
+  .btn,
+  .btn-sm,
+  .input {
+    min-height: 44px;
+  }
+  .btn-icon {
+    min-width: 44px;
+  }
+  .checkbox-label {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-nav {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-chip {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --hairline: rgba(0, 0, 0, 0.25);
+    --field-border: rgba(0, 0, 0, 0.45);
+  }
+  .dark {
+    --hairline: rgba(255, 255, 255, 0.3);
+    --field-border: rgba(255, 255, 255, 0.5);
+  }
+  .glass-nav {
+    background: var(--surface);
   }
 }

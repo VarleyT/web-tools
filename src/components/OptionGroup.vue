@@ -8,8 +8,9 @@ defineProps<{
 </script>
 
 <template>
+  <!-- 分段控件：灰色轨道 + 白色滑块 -->
   <div
-    class="inline-flex flex-wrap gap-0.5 rounded-lg border border-slate-200 bg-slate-100 p-0.5 dark:border-slate-700 dark:bg-slate-800"
+    class="inline-flex w-fit max-w-full gap-0.5 overflow-x-auto rounded-pill bg-fill p-[3px]"
     role="radiogroup"
     :aria-label="ariaLabel"
   >
@@ -19,11 +20,11 @@ defineProps<{
       type="button"
       role="radio"
       :aria-checked="model === option.value"
-      class="cursor-pointer rounded-md px-2.5 py-1 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-indigo-500"
+      class="h-[30px] shrink-0 cursor-pointer rounded-pill px-3.5 text-[13px] whitespace-nowrap transition-[background-color,color,box-shadow] duration-200 ease-out-quart active:scale-[0.97] pointer-coarse:h-[38px]"
       :class="
         model === option.value
-          ? 'bg-white text-indigo-600 shadow-xs dark:bg-slate-600 dark:text-white'
-          : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
+          ? 'bg-seg-thumb font-semibold text-ink shadow-thumb'
+          : 'font-medium text-ink-2 hover:text-ink'
       "
       @click="model = option.value"
     >

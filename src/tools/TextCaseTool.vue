@@ -19,7 +19,7 @@ const results = computed(() =>
 <template>
   <div class="flex flex-col gap-4">
     <TextPanel v-model="input" label="输入（多行时逐行转换）" :rows="5" placeholder="user_name / UserName / user-name" />
-    <section class="card py-2">
+    <section class="panel rows py-1.5">
       <CopyRow v-for="result in results" :key="result.id" :label="result.label" :value="result.value" />
     </section>
   </div>

@@ -18,7 +18,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update Log File
-        run: echo "Last run: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > monthly.log
+        run: |
+          echo "Last run: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > monthly.log
 
       - name: Commit and Push
         run: |

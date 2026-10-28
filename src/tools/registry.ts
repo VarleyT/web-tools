@@ -1,6 +1,6 @@
 import type { Component } from 'vue'
 
-export type CategoryId = 'encode' | 'data' | 'dev' | 'generator'
+export type CategoryId = 'app' | 'encode' | 'data' | 'dev' | 'generator'
 
 export interface Category {
   id: CategoryId
@@ -19,14 +19,28 @@ export interface ToolMeta {
   component: () => Promise<Component>
 }
 
-export const CATEGORIES: readonly Category[] = [
+/** 大工具：完整的本地调试应用，页面更宽，在侧边栏与首页中与小工具分开展示 */
+export const APP_CATEGORY: Category = { id: 'app', name: '工作台', description: '完整的本地调试应用' }
+
+export const UTILITY_CATEGORIES: readonly Category[] = [
   { id: 'encode', name: '编解码 / 加密', description: 'Base64、Hex、URL、哈希、AES、RSA、JWT' },
   { id: 'data', name: '数据格式', description: 'JSON、YAML、SQL 格式化与互转' },
   { id: 'dev', name: '开发辅助', description: '时间戳、进制、UUID、正则、对比、颜色' },
   { id: 'generator', name: '生成器 / 文本', description: '密码、二维码、字数统计、命名转换' },
 ]
 
+export const CATEGORIES: readonly Category[] = [APP_CATEGORY, ...UTILITY_CATEGORIES]
+
 export const TOOLS: readonly ToolMeta[] = [
+  {
+    id: 'serial',
+    name: '串口助手',
+    description: '基于 Web Serial 的本地串口调试：文本 / Hex 收发、时间戳、定时发送与快捷指令',
+    category: 'app',
+    badge: 'COM',
+    keywords: ['serial', 'uart', 'com', 'tty', 'rs232', 'rs485', 'baud', 'usb', '串口', '调试', '波特率', '单片机'],
+    component: () => import('./serial/SerialTool.vue'),
+  },
   {
     id: 'base64',
     name: 'Base64 编解码',
@@ -231,6 +245,10 @@ const TOOL_MAP = new Map(TOOLS.map((tool) => [tool.id, tool]))
 
 export function findTool(id: string): ToolMeta | undefined {
   return TOOL_MAP.get(id)
+}
+
+export function isApp(tool: ToolMeta): boolean {
+  return tool.category === APP_CATEGORY.id
 }
 
 export function toolsOfCategory(category: CategoryId): ToolMeta[] {

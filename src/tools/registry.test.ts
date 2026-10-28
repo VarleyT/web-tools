@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CATEGORIES, findTool, searchTools, TOOLS, toolsOfCategory } from './registry'
+import { CATEGORIES, findTool, isApp, searchTools, TOOLS, toolsOfCategory } from './registry'
 
 describe('tool registry', () => {
   it('has unique ids and valid categories', () => {
@@ -24,6 +24,13 @@ describe('tool registry', () => {
     expect(searchTools('rsa')[0].id).toBe('rsa')
     expect(searchTools('公钥')[0].id).toBe('rsa')
     expect(searchTools('ascii')[0].id).toBe('hex')
+    expect(searchTools('串口')[0].id).toBe('serial')
+    expect(searchTools('uart')[0].id).toBe('serial')
     expect(searchTools('not-a-tool-xyz')).toEqual([])
+  })
+
+  it('separates apps from utilities', () => {
+    expect(TOOLS.filter(isApp).map((tool) => tool.id)).toEqual(['serial'])
+    expect(isApp(findTool('json')!)).toBe(false)
   })
 })

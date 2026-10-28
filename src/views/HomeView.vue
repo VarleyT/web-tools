@@ -2,10 +2,11 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
+import ToolIcon from '@/components/ToolIcon.vue'
 import ToolList from '@/components/ToolList.vue'
 import { useFavorites, useRecent } from '@/composables/usePreferences'
 import { useToolSearch } from '@/composables/useToolSearch'
-import { CATEGORIES, findTool, searchTools, toolsOfCategory, TOOLS, type ToolMeta } from '@/tools/registry'
+import { APP_CATEGORY, findTool, searchTools, toolsOfCategory, TOOLS, UTILITY_CATEGORIES, type ToolMeta } from '@/tools/registry'
 
 const { query, requestSearchFocus } = useToolSearch()
 const { favorites } = useFavorites()
@@ -18,6 +19,7 @@ const resolve = (ids: readonly string[]): ToolMeta[] =>
 
 const favoriteTools = computed(() => resolve(favorites.value))
 const recentTools = computed(() => resolve(recent.value))
+const apps = toolsOfCategory(APP_CATEGORY.id)
 const isSearching = computed(() => query.value.trim() !== '')
 const searchResults = computed(() => (isSearching.value ? searchTools(query.value) : []))
 </script>
@@ -85,7 +87,32 @@ const searchResults = computed(() => (isSearching.value ? searchTools(query.valu
         </div>
       </section>
 
-      <section v-for="category in CATEGORIES" :key="category.id" :aria-labelledby="`cat-${category.id}`" class="flex flex-col gap-4">
+      <!-- 大工具：独立的大卡片，与下方小工具的统一面板区分开 -->
+      <section v-if="apps.length" aria-labelledby="cat-app" class="flex flex-col gap-4">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h2 id="cat-app" class="text-[clamp(20px,3.4vw,26px)] leading-tight font-bold tracking-[-0.02em]">{{ APP_CATEGORY.name }}</h2>
+          <p class="text-[14px] text-ink-3">{{ APP_CATEGORY.description }}</p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2">
+          <RouterLink
+            v-for="tool in apps"
+            :key="tool.id"
+            :to="{ name: 'tool', params: { id: tool.id } }"
+            class="group flex items-center gap-4 rounded-panel bg-surface p-[clamp(18px,3vw,24px)] shadow-panel transition-[box-shadow,transform] duration-200 ease-out-quart hover:-translate-y-0.5 hover:shadow-lift active:scale-[0.99]"
+          >
+            <ToolIcon :badge="tool.badge" size="lg" />
+            <span class="min-w-0 flex-1">
+              <span class="block text-[17px] leading-snug font-semibold tracking-[-0.01em] text-ink transition-colors duration-150 group-hover:text-accent-link">
+                {{ tool.name }}
+              </span>
+              <span class="mt-1 line-clamp-2 text-[13.5px] leading-snug text-ink-2">{{ tool.description }}</span>
+            </span>
+            <AppIcon name="chevron-right" :size="18" class="text-ink-4 transition-colors duration-150 group-hover:text-accent-link" />
+          </RouterLink>
+        </div>
+      </section>
+
+      <section v-for="category in UTILITY_CATEGORIES" :key="category.id" :aria-labelledby="`cat-${category.id}`" class="flex flex-col gap-4">
         <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h2 :id="`cat-${category.id}`" class="text-[clamp(20px,3.4vw,26px)] leading-tight font-bold tracking-[-0.02em]">
             {{ category.name }}

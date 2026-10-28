@@ -4,14 +4,17 @@
 
 参考了 [naroat/tools-web](https://github.com/naroat/tools-web) 与 [nidhogg1024/Ctool](https://github.com/nidhogg1024/Ctool) 的工具分类与交互方式。
 
-## 工具（22 个）
+## 工具（23 个）
 
 | 分类 | 工具 |
 | --- | --- |
+| 工作台（大工具） | 串口助手（Web Serial：文本 / Hex 收发、UTF-8 / GBK、时间戳、分包显示（超时默认 20ms）、定时发送、快捷指令、DTR / RTS、硬件 / 软件（XON/XOFF）流控、日志导出） |
 | 编解码 / 加密 | Base64（含文件转 Data URL）、Hex ⇄ ASCII、URL（含 URL 解析）、HTML 实体、Unicode 转义、哈希 / HMAC、对称加解密（AES / DES / 3DES / RC4）、RSA 加解密（PKCS#1 v1.5 / OAEP，含密钥对生成）、JWT 解析 |
 | 数据格式 | JSON 格式化 / 压缩 / 校验 / 排序 / 转义、JSON ⇄ YAML、SQL 格式化（多方言） |
 | 开发辅助 | 时间戳转换、进制转换（大整数）、UUID v4 / v7、正则测试（高亮 + 替换）、文本对比、颜色转换 |
 | 生成器 / 文本 | 密码生成、二维码生成、字数统计、命名风格转换 |
+
+> 串口助手依赖 Web Serial API，仅支持桌面版 Chrome / Edge 89+，且需通过 HTTPS 或 localhost 访问。该 API 只支持 7 / 8 位数据位、1 / 2 位停止位、无 / 奇 / 偶校验，其余选项在界面中置灰。
 
 通用能力：`Ctrl/⌘ + K` 搜索、收藏、最近使用、浅色 / 深色 / 跟随系统主题、工具输入自动保存。
 
@@ -44,7 +47,7 @@ pnpm build        # 产物输出到 dist/
 ```
 src/
 ├── lib/            纯函数逻辑（与 UI 无关，均有单元测试）
-├── tools/          registry.ts 工具注册表 + 各工具组件 *Tool.vue（按需加载）
+├── tools/          registry.ts 工具注册表 + 各工具组件 *Tool.vue（按需加载）；大工具放在子目录，如 serial/
 ├── components/     通用组件：TextPanel、CodecTool、OptionGroup、CopyRow ...
 ├── composables/    useToolState（输入持久化）、usePreferences（收藏/最近/主题）...
 ├── layouts/        侧边栏布局
@@ -57,7 +60,7 @@ src/
 2. 在 `src/tools/` 新建 `XxxTool.vue`。
 3. 在 `src/tools/registry.ts` 的 `TOOLS` 中登记 `id / name / category / badge / keywords / component`。
 
-路由、侧边栏、首页卡片和搜索会自动生效。
+路由、侧边栏、首页卡片和搜索会自动生效。`category: 'app'` 表示大工具：侧边栏单独分组、首页显示大卡片、工具页加宽。
 
 ## 隐私
 

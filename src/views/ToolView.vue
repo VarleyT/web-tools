@@ -29,7 +29,7 @@ import { RouterLink } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
 import ToolIcon from '@/components/ToolIcon.vue'
 import { useFavorites, useRecent } from '@/composables/usePreferences'
-import { CATEGORIES, findTool } from '@/tools/registry'
+import { CATEGORIES, findTool, isApp } from '@/tools/registry'
 
 const props = defineProps<{ id: string }>()
 
@@ -38,6 +38,9 @@ const { recordRecent } = useRecent()
 
 const tool = computed(() => findTool(props.id))
 const categoryName = computed(() => CATEGORIES.find((category) => category.id === tool.value?.category)?.name ?? '')
+
+// 大工具需要并排的多栏布局，页面放宽
+const isWide = computed(() => (tool.value ? isApp(tool.value) : false))
 
 const toolComponent = computed(() => (tool.value ? asyncToolComponent(tool.value.id, tool.value.component) : null))
 
@@ -51,7 +54,7 @@ watch(
 </script>
 
 <template>
-  <div v-if="tool" class="mx-auto max-w-[1080px]">
+  <div v-if="tool" class="mx-auto" :class="isWide ? 'max-w-[1440px]' : 'max-w-[1080px]'">
     <header class="mb-[clamp(22px,4vw,34px)] flex items-start gap-4 pt-[clamp(0px,1vw,8px)]">
       <ToolIcon :badge="tool.badge" size="lg" class="mt-1 hidden sm:inline-flex" />
       <div class="min-w-0 flex-1">

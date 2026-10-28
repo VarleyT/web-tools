@@ -4,10 +4,11 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import AppIcon from '@/components/AppIcon.vue'
 import BrandMark from '@/components/BrandMark.vue'
+import ToolIcon from '@/components/ToolIcon.vue'
 import OptionGroup from '@/components/OptionGroup.vue'
 import { useTheme, type ThemeMode } from '@/composables/usePreferences'
 import { useToolSearch } from '@/composables/useToolSearch'
-import { CATEGORIES, searchTools } from '@/tools/registry'
+import { APP_CATEGORY, isApp, searchTools, UTILITY_CATEGORIES } from '@/tools/registry'
 
 const SCROLL_EDGE_PX = 8
 const THEME_OPTIONS: ReadonlyArray<{ label: string; value: ThemeMode }> = [
@@ -40,8 +41,9 @@ watch([sidebarOpen, isDesktop], ([open, desktop]) => {
 })
 
 const results = computed(() => searchTools(query.value))
+const apps = computed(() => results.value.filter(isApp))
 const groups = computed(() =>
-  CATEGORIES.map((category) => ({
+  UTILITY_CATEGORIES.map((category) => ({
     category,
     tools: results.value.filter((tool) => tool.category === category.id),
   })).filter((group) => group.tools.length > 0),
@@ -151,6 +153,20 @@ watch(
       </div>
 
       <nav class="flex-1 overflow-y-auto px-3 pb-4" aria-label="工具导航">
+        <!-- 大工具：带图标的独立分组，与下方的小工具用发丝线隔开 -->
+        <section v-if="apps.length" class="pb-3 shadow-[0_1px_0_var(--hairline)]">
+          <h2 class="px-3 pt-4 pb-1.5 text-[11.5px] font-semibold tracking-[0.02em] text-indigo">{{ APP_CATEGORY.name }}</h2>
+          <RouterLink
+            v-for="tool in apps"
+            :key="tool.id"
+            :to="{ name: 'tool', params: { id: tool.id } }"
+            class="flex h-11 items-center gap-2.5 rounded-thumb px-2 text-[14px] font-medium text-ink transition-colors duration-150 hover:bg-fill"
+            active-class="!bg-accent/10 font-semibold !text-accent-link"
+          >
+            <ToolIcon :badge="tool.badge" size="sm" />
+            {{ tool.name }}
+          </RouterLink>
+        </section>
         <section v-for="group in groups" :key="group.category.id">
           <h2 class="px-3 pt-4 pb-1.5 text-[11.5px] font-semibold tracking-[0.02em] text-indigo">{{ group.category.name }}</h2>
           <RouterLink
@@ -163,7 +179,7 @@ watch(
             {{ tool.name }}
           </RouterLink>
         </section>
-        <p v-if="groups.length === 0" class="px-3 pt-4 text-[13px] text-ink-3">没有匹配的工具</p>
+        <p v-if="groups.length === 0 && apps.length === 0" class="px-3 pt-4 text-[13px] text-ink-3">没有匹配的工具</p>
       </nav>
 
       <footer class="flex flex-col gap-2.5 px-4 pt-3 pb-4 shadow-[inset_0_1px_0_var(--hairline)]">

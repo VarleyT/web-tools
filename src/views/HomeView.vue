@@ -6,6 +6,7 @@ import ToolIcon from '@/components/ToolIcon.vue'
 import ToolList from '@/components/ToolList.vue'
 import { useFavorites, useRecent } from '@/composables/usePreferences'
 import { useToolSearch } from '@/composables/useToolSearch'
+import { useTypewriter } from '@/composables/useTypewriter'
 import { APP_CATEGORY, findTool, searchTools, toolsOfCategory, TOOLS, UTILITY_CATEGORIES, type ToolMeta } from '@/tools/registry'
 
 const { query, requestSearchFocus } = useToolSearch()
@@ -13,6 +14,8 @@ const { favorites } = useFavorites()
 const { recent, clearRecent } = useRecent()
 const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent)
 const FEATURES = [`${TOOLS.length} 个工具`, '本地运算不上传', '深色模式'] as const
+const BRAND = 'ByteGrep'
+const typedBrand = useTypewriter(BRAND)
 
 const resolve = (ids: readonly string[]): ToolMeta[] =>
   ids.map(findTool).filter((tool): tool is ToolMeta => tool !== undefined)
@@ -34,7 +37,10 @@ const searchResults = computed(() => (isSearching.value ? searchTools(query.valu
       <div class="absolute -bottom-28 left-[12%] -z-10 size-60 rounded-full bg-[rgba(120,80,255,0.5)] blur-[50px]" aria-hidden="true" />
       <div class="absolute top-1/3 right-[18%] -z-10 size-40 rounded-full bg-[rgba(90,200,250,0.35)] blur-[44px]" aria-hidden="true" />
 
-      <p class="text-[12px] font-semibold tracking-[0.14em] text-white/70">BYTEGREP TOOL</p>
+      <p class="font-mono text-[15px] leading-6 font-semibold tracking-[0.04em] text-white/80">
+        <span class="sr-only">{{ BRAND }}</span>
+        <span aria-hidden="true">{{ typedBrand }}<span class="animate-caret-blink motion-reduce:animate-none">_</span></span>
+      </p>
       <h1 class="mt-3.5 text-[clamp(32px,6vw,52px)] leading-[1.06] font-bold tracking-[-0.03em]">开发者工具箱</h1>
       <p class="mt-4 max-w-[560px] text-[clamp(15px,2.5vw,18px)] leading-[1.6] text-white/82">
         编解码、加密、格式化与生成器。所有计算都在浏览器本地完成，数据不离开你的设备。

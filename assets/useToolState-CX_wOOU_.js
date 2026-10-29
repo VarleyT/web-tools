@@ -1,0 +1,1 @@
+import{f as e}from"./index-8Vd65aox.js";function t(t,n,r){return e(`bytegrep:tool:${t}:${n}`,r)}export{t};

@@ -1,0 +1,1 @@
+import{S as e}from"./index-8Vd65aox.js";function t(e){return e instanceof Error?e.message:String(e)}function n(n,r){let i=e(()=>{try{return{value:n(),error:``}}catch(e){return{value:r,error:t(e)}}});return{value:e(()=>i.value.value),error:e(()=>i.value.error)}}export{n,t};
